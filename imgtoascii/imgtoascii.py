@@ -22,13 +22,38 @@ class ImageProcessor:
             grey_scale.append("\n") #to show that a new line has started
         return grey_scale
 
+    def decideAsciiChar(number):
+        if number in range(0, 28):
+            char = "#"
+        elif number in range(28, 56):
+            char = "X"
+        elif number in range(56, 84):
+            char = "%"
+        elif number in range(84, 112):
+            char = "&"
+        elif number in range(112, 141):
+            char = "*"
+        elif number in range(141, 168):
+            char = "+"
+        elif number in range(168, 196):
+            char = "/"
+        elif number in range(196, 224):
+            char = "("
+        elif number in range(224, 226):
+            char = "."
+        else:
+            char = " "
+
+        return char
+
+
     def processImage(self, image):
         self.image = Image.open(image)
-        file = open("asciiimage.txt", "w")
-        self.setAsciFile(file)
+        self.setAsciFile(open("asciiimage.txt", "w"))
         grey_scale = self.convertGrayScale()
-        print(grey_scale)
-
+        char = self.decideAsciiChar()
+        
+        
 
 
 if __name__ == "__main__":
