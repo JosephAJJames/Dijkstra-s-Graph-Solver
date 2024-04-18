@@ -12,17 +12,24 @@ class ImageProcessor:
     def setAsciFile(self, file):
         self.asciFile = file
 
+    def resizeImage(self, scale): #method to resize image
+        w, h = self.image.size
+        if scale <= 0:
+            scale = 1
+
+        self.image = self.image.resize((w//scale, h//scale))
+
     def convertGrayScale(self):
         self.image = self.image.convert("L")
         pxls = self.image.load()
         grey_scale = []
-        for x in range(self.image.size[0]):
-            for y in range(self.image.size[1]):
-                grey_scale.append(pxls[x, y]) #add grayscale integter values
-            grey_scale.append("\n") #to show that a new line has started
+        for y in range(self.image.size[1]):  # Iterate over height first
+            for x in range(self.image.size[0]):  # Then iterate over width
+                grey_scale.append(pxls[x, y])  # add grayscale integer values
+            grey_scale.append("\n")  # to show that a new line has started
         return grey_scale
 
-    def decideAsciiChar(number):
+    def decideAsciiChar(self, number): #decides which character should replace a pixel based on its intensity
         if number in range(0, 28):
             char = "#"
         elif number in range(28, 56):
@@ -41,23 +48,25 @@ class ImageProcessor:
             char = "("
         elif number in range(224, 226):
             char = "."
+        elif number == "\n":
+            char = "\n"
         else:
             char = " "
-
+        
         return char
 
-
-    def processImage(self, image):
+    def processImage(self, image, scale):
         self.image = Image.open(image)
-        self.setAsciFile(open("asciiimage.txt", "w"))
+        self.resizeImage(10)
+        self.setAsciFile(open("asciiimage.txt", "a"))
         grey_scale = self.convertGrayScale()
-        char = self.decideAsciiChar()
-        
-        
+        for x in range(len(grey_scale)):
+            char = self.decideAsciiChar(grey_scale[x])
+            self.asciFile.write(char)
 
 
 if __name__ == "__main__":
     imageProcessor = ImageProcessor()
-    imageName = "former-ukip-leader-nigel-farage-and-hard-right-tory-mp-jacob-rees-mogg2.jpg"
-    imageProcessor.processImage(imageName)
-    print("working")
+    imageName = input("Give the path to the image you'd like to convert:")
+    scaleFactor = int(input("Give the scale factor you'd like to use to downsize the image"))
+    imageProcessor.processImage(imageName, scaleFactor)
