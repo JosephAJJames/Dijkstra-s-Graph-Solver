@@ -29,20 +29,29 @@ class GenerateGraph:
             newNode = nodeChoices[num]
             self.nodes.append(newNode)
             iteration = iteration + 1
+            print("stuck in big loop")
+        pass
+
+    def insertNodesIntoDict(self):
+        for x in self.nodes:
+            dict[x] = "None"
         pass
 
     def generateUnique(self, numList, length):
-        num = random.randint(0, length)
-        if num in numList:
-            while (num in numList):
-                num = random.randint(0, length)
-                #print("stuck in small loop")
+        allNums = set(range(length + 1))
+        usedNums = set(numList)
+        unusedList = list(allNums - usedNums) #generate set of unused numbers
+
+        if len(unusedList) == 0: #if there are no unused numbers
+            return None, numList
+
+        num = random.choice(unusedList) #pick a random number from the unused list
+
         numList.append(num)
         return num, numList
         pass
 
     def createConnections(self):
-
         pass
     
     def createWeightings(self):
@@ -52,4 +61,5 @@ graphGenerator = GenerateGraph()
 for x in range(0, 4):
     graphGenerator.generateNodes()
     graphGenerator.printNodes()
+    print(graphGenerator.dict)
     graphGenerator.clearDict()
