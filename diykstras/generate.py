@@ -8,17 +8,17 @@ class GenerateGraph:
         self.graphSizeMax = 8
         pass
 
-    def clearDict(self):
+    def clearDict(self) -> None:
         self.dict = {}
         self.nodes = []
         pass
 
-    def printNodes(self):
+    def printNodes(self) -> None:
         print(self.nodes)
         pass
 
 
-    def generateNodes(self):
+    def generateNodes(self) -> None:
         graphSize = random.randint(5, self.graphSizeMax) #determines the size of graph(between 5 to 8)
         iteration = 0
         self.nodes.append("A") #ensure A (which is the start point) is always in the graph
@@ -35,12 +35,12 @@ class GenerateGraph:
             print("stuck in big loop")
         pass
 
-    def insertNodesIntoDict(self):
+    def insertNodesIntoDict(self) -> None:
         for x in self.nodes:
             self.dict[x] = "None"
         pass
 
-    def generateUnique(self, numList, length):
+    def generateUnique(self, numList: List[int], length: int) -> (int, List[int]):
         allNums = set(range(length + 1))
         usedNums = set(numList)
         unusedList = list(allNums - usedNums) #generate set of unused numbers
@@ -54,13 +54,17 @@ class GenerateGraph:
         return num, numList
         pass
 
-    def allPossibleConnections(self):
+    def allPossibleConnections(self) -> set(tuple):
         allCons = set()
-        pass
+        nodesConsiderd = []
+        for x in range(0, len(self.nodes)):
+            for y in range(x+1, len(self.nodes)):
+                myTuple = tuple((self.nodes[x], self.nodes[y]))
+                allCons.add(myTuple)
+        return allCons
 
-    def createConnections(self):
-        currentConnections = set()
-
+    def createConnections(self) -> None:
+        allCons = self.allPossibleConnections()
         pass
     
     def createWeightings(self):
@@ -75,9 +79,10 @@ class GenerateGraph:
         return self.dict
 
 graphGenerator = GenerateGraph()
-for x in range(0, 4):
+for x in range(0, 1):
     graphGenerator.generateNodes()
     graphGenerator.printNodes()
     graphGenerator.insertNodesIntoDict()
     print(graphGenerator.dict)
+    graphGenerator.allPossibleConnections()
     graphGenerator.clearDict()
