@@ -1,11 +1,17 @@
 import random
 
+
+
+#https://csacademy.com/app/graph_editor/ graph editor
+
+
 class GenerateGraph:
     
     def __init__(self):
         self.dict = {}
         self.nodes = []
         self.graphSizeMax = 8
+        self.graphSize = 0
         pass
 
     def clearDict(self) -> None:
@@ -20,6 +26,7 @@ class GenerateGraph:
 
     def generateNodes(self) -> None:
         graphSize = random.randint(5, self.graphSizeMax) #determines the size of graph(between 5 to 8)
+        self.graphSize = graphSize
         iteration = 0
         self.nodes.append("A") #ensure A (which is the start point) is always in the graph
         indiciesUsed = [] #list of indicies used to avoid repeated nodes
@@ -40,7 +47,7 @@ class GenerateGraph:
             self.dict[x] = "None"
         pass
 
-    def generateUnique(self, numList: List[int], length: int) -> (int, List[int]):
+    def generateUnique(self, numList: list[int], length: int) -> (int, list[int]):
         allNums = set(range(length + 1))
         usedNums = set(numList)
         unusedList = list(allNums - usedNums) #generate set of unused numbers
@@ -54,18 +61,36 @@ class GenerateGraph:
         return num, numList
         pass
 
-    def allPossibleConnections(self) -> set(tuple):
+    def generateOpositeConnections(self, curCons: list[tuple((str, str))]) -> list[tuple((str, str))]:
+        for x in range(0, len(curCons)):
+            originalTuple = curCons[x]
+            first = originalTuple[0]
+            second = originalTuple[1]
+            mirroredTuple = tuple((second, first))
+            curCons.append(mirroredTuple)
+        return curCons
+
+    def allPossibleConnections(self) -> set():
         allCons = set()
         nodesConsiderd = []
         for x in range(0, len(self.nodes)):
-            for y in range(x+1, len(self.nodes)):
-                myTuple = tuple((self.nodes[x], self.nodes[y]))
-                allCons.add(myTuple)
+            for y in range(0, len(self.nodes)):
+                if x != y:
+                    myTuple = tuple((self.nodes[x], self.nodes[y]))
+                    allCons.add(myTuple)
         return allCons
 
-    def createConnections(self) -> None:
+    def createConnections(self) -> list[tuple((str, str))]:
         allCons = self.allPossibleConnections()
-        pass
+        curCons = []
+        print(self.nodes)
+        for x in range(0, self.graphSize):
+            element = random.choice(list(allCons))
+            curCons.append(element)
+            allCons = set(allCons - {element})
+        curCons = self.generateOpositeConnections(curCons)
+        print("########\n" , curCons)
+        return curCons
     
     def createWeightings(self):
         pass
@@ -84,5 +109,5 @@ for x in range(0, 1):
     graphGenerator.printNodes()
     graphGenerator.insertNodesIntoDict()
     print(graphGenerator.dict)
-    graphGenerator.allPossibleConnections()
+    graphGenerator.createConnections()
     graphGenerator.clearDict()
