@@ -19,6 +19,11 @@ class GenerateGraph:
         self.nodes = []
         pass
 
+    def printDict(self) -> None:
+        for x in self.dict:
+            
+            print(x + " :{}".format(self.dict.get(x)))
+
     def printNodes(self) -> None:
         print(self.nodes)
         pass
@@ -44,7 +49,7 @@ class GenerateGraph:
 
     def insertNodesIntoDict(self) -> None:
         for x in self.nodes:
-            self.dict[x] = "None"
+            self.dict[x] = None
         pass
 
     def generateUnique(self, numList: list[int], length: int) -> (int, list[int]):
@@ -84,14 +89,24 @@ class GenerateGraph:
         allCons = self.allPossibleConnections()
         curCons = []
         print(self.nodes)
-        for x in range(0, self.graphSize):
+        for x in range(0, self.graphSize + 5):
             element = random.choice(list(allCons))
             curCons.append(element)
             allCons = set(allCons - {element})
         curCons = self.generateOpositeConnections(curCons)
-        print("########\n" , curCons)
+        #print("########\n" , curCons)
         return curCons
     
+    def addConnections(self, cons:list[tuple((str, str))]) -> None:
+        for x in self.dict:
+            if self.dict[x] is None or self.dict[x] == "None":
+                self.dict[x] = set()
+
+        print("working")
+        for x in cons:
+            self.dict[x[0]].add(x[1])
+            print("added to set")
+
     def createWeightings(self):
         pass
 
@@ -109,5 +124,8 @@ for x in range(0, 1):
     graphGenerator.printNodes()
     graphGenerator.insertNodesIntoDict()
     print(graphGenerator.dict)
-    graphGenerator.createConnections()
+    cons = graphGenerator.createConnections()
+    print("########\n", cons)
+    graphGenerator.addConnections(cons)
+    graphGenerator.printDict()
     graphGenerator.clearDict()
