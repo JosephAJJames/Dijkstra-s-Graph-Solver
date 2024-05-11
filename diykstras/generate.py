@@ -104,7 +104,7 @@ class GenerateGraph:
 
         print("working")
         for x in cons:
-            self.dict[x[0]].add(x[1])
+            self.dict[x[0]].add(tuple(x[1]))
             print("added to set")
 
     def createWeightings(self):
