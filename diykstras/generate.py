@@ -87,7 +87,6 @@ class GenerateGraph:
     def createConnections(self) -> list[tuple((str, str))]:
         allCons = self.allPossibleConnections()
         curCons = []
-        print(self.nodes)
         for x in range(0, self.graphSize + 5):
             element = random.choice(list(allCons))
             curCons.append(element)
@@ -120,6 +119,6 @@ class GenerateGraph:
         self.generateNodes()
         self.insertNodesIntoDict()
         cons = self.createConnections()
-        graphGenerator.addConnections(cons)
+        self.addConnections(cons)
         self.createWeightings()
         return self.dict
