@@ -44,7 +44,6 @@ class GenerateGraph:
             newNode = nodeChoices[num]
             self.nodes.append(newNode)
             iteration = iteration + 1
-            print("stuck in big loop")
         pass
 
     def insertNodesIntoDict(self) -> None:
@@ -94,7 +93,6 @@ class GenerateGraph:
             curCons.append(element)
             allCons = set(allCons - {element})
         curCons = self.generateOpositeConnections(curCons)
-        #print("########\n" , curCons)
         return curCons
     
     def addConnections(self, cons:list[tuple((str, str))]) -> None:
@@ -102,30 +100,26 @@ class GenerateGraph:
             if self.dict[x] is None or self.dict[x] == "None":
                 self.dict[x] = set()
 
-        print("working")
         for x in cons:
             self.dict[x[0]].add(tuple(x[1]))
-            print("added to set")
+
+    def addValueToTuples(self ,value_set, value):
+        new_set = set()
+        for item in value_set:
+            new_item = item + (value,)
+            new_set.add(new_item)
+        return new_set
 
     def createWeightings(self):
-        pass
+        choices = [3, 2, 1, 0, 5, 8, 7]
+        for keys in self.dict.keys():
+            updatedSet = self.addValueToTuples(self.dict[keys], random.choice(choices))
+            self.dict[keys] = updatedSet
 
     def generateGraph(self):
         self.generateNodes()
         self.insertNodesIntoDict()
-        self.allPossibleConnections()
-        self.createConnections()
+        cons = self.createConnections()
+        graphGenerator.addConnections(cons)
         self.createWeightings()
         return self.dict
-
-graphGenerator = GenerateGraph()
-for x in range(0, 1):
-    graphGenerator.generateNodes()
-    graphGenerator.printNodes()
-    graphGenerator.insertNodesIntoDict()
-    print(graphGenerator.dict)
-    cons = graphGenerator.createConnections()
-    print("########\n", cons)
-    graphGenerator.addConnections(cons)
-    graphGenerator.printDict()
-    graphGenerator.clearDict()
